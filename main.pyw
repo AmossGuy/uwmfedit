@@ -26,6 +26,8 @@ class EditorFrame(wx.Frame):
 
         self.SetMenuBar(menubar)
 
+        self.image = wx.Image("test_tile.png")
+
         #self.Bind(wx.EVT_MENU, self.newfile, id=wx.ID_NEW)
 
 class EditCanvas(glcanvas.GLCanvas):
@@ -85,6 +87,18 @@ class EditCanvas(glcanvas.GLCanvas):
         glClearColor(0.1, 0.15, 0.1, 1)
 
         glUseProgram(shaders)
+	
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT)
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT)
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+
+        texture = glGenTextures(1)
+        glBindTexture(GL_TEXTURE_2D, texture)
+
+        image = self.GetGrandParent().image
+        buffer = image.GetDataBuffer()
+        glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, image.Width, image.Height, 0, GL_RGB, GL_UNSIGNED_BYTE, numpy.array(buffer, dtype=numpy.uint8))
 
         self.initialized = True
         
