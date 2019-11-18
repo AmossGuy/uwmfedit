@@ -1,9 +1,11 @@
 # version 330
 
 in vec3 newColor;
+in vec2 texcoord;
 
-out vec4 outColor;
+uniform sampler2D ourtexture;
 
 void main() {
-	outColor = vec4(newColor, 1.0);
+	gl_FragColor = texture2D(ourtexture, texcoord);
+	//gl_FragColor = vec4(0.5, 0.5, 0.5, 1.0);
 }

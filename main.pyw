@@ -90,14 +90,18 @@ class EditCanvas(glcanvas.GLCanvas):
         glClearColor(0.1, 0.15, 0.1, 1)
 
         glUseProgram(shaders)
-	
+
+        self.texture = glGenTextures(1)
+        glActiveTexture(GL_TEXTURE0);
+        glBindTexture(GL_TEXTURE_2D, self.texture)
+
+        glPixelStorei(GL_UNPACK_ALIGNMENT, 1)
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT)
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT)
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
 
-        texture = glGenTextures(1)
-        glBindTexture(GL_TEXTURE_2D, texture)
+        glUniform1i(glGetUniformLocation(shaders, "ourtexture"), 0)
 
         image = self.GetGrandParent().image
         buffer = image.GetDataBuffer()
