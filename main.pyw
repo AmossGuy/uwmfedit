@@ -53,10 +53,10 @@ class EditCanvas(glcanvas.GLCanvas):
         self.SetCurrent(self.context)
 
         rectangle = numpy.array(
-            [-0.5,-0.5,  1.0, 0.0, 0.0,
-             -0.5, 0.5,  0.0, 1.0, 0.0,
-              0.5, 0.5,  0.0, 0.0, 1.0,
-              0.5,-0.5,  1.0, 1.0, 1.0],
+            [-0.5,-0.5,  1.0, 0.0, 0.0,  0.0, 0.0,
+             -0.5, 0.5,  0.0, 1.0, 0.0,  0.0, 1.0,
+              0.5, 0.5,  0.0, 0.0, 1.0,  1.0, 1.0,
+              0.5,-0.5,  1.0, 1.0, 1.0,  1.0, 0.0],
         dtype=numpy.float32)
 
         rectangle_elements = numpy.array(
@@ -74,11 +74,14 @@ class EditCanvas(glcanvas.GLCanvas):
         glBindBuffer(GL_ARRAY_BUFFER, vbo)
         glBufferData(GL_ARRAY_BUFFER, rectangle.nbytes, rectangle, GL_STATIC_DRAW)
 
-        glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, 5 * rectangle.itemsize, ctypes.c_void_p(0))
+        glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, 7 * rectangle.itemsize, ctypes.c_void_p(0))
         glEnableVertexAttribArray(0)
 
-        glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 5 * rectangle.itemsize, ctypes.c_void_p(2 * rectangle.itemsize))
+        glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 7 * rectangle.itemsize, ctypes.c_void_p(2 * rectangle.itemsize))
         glEnableVertexAttribArray(1)
+
+        glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, 7 * rectangle.itemsize, ctypes.c_void_p(5 * rectangle.itemsize))
+        glEnableVertexAttribArray(2)
 
         elementbuffer = glGenBuffers(1)
         glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, elementbuffer)
