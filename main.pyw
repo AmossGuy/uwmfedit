@@ -42,6 +42,7 @@ class EditCanvas(glcanvas.GLCanvas):
     def OnResize(self, event):
         if self.initialized:
             glViewport(0, 0, event.Size.width, event.Size.height)
+            glUniform2f(glGetUniformLocation(self.shaders, "screensize"), event.Size.width, event.Size.height)
 
     def OnPaint(self, event):
         if not self.initialized:
@@ -53,10 +54,10 @@ class EditCanvas(glcanvas.GLCanvas):
         self.SetCurrent(self.context)
 
         rectangle = numpy.array(
-            [-0.5,-0.5,  1.0, 0.0, 0.0,  0.0, 0.0,
-             -0.5, 0.5,  0.0, 1.0, 0.0,  0.0, 1.0,
-              0.5, 0.5,  0.0, 0.0, 1.0,  1.0, 1.0,
-              0.5,-0.5,  1.0, 1.0, 1.0,  1.0, 0.0],
+            [-100.0,-100.0,  1.0, 0.0, 0.0,  0.0, 0.0,
+             -100.0, 100.0,  0.0, 1.0, 0.0,  0.0, 1.0,
+              100.0, 100.0,  0.0, 0.0, 1.0,  1.0, 1.0,
+              100.0,-100.0,  1.0, 1.0, 1.0,  1.0, 0.0],
         dtype=numpy.float32)
 
         rectangle_elements = numpy.array(
@@ -65,7 +66,7 @@ class EditCanvas(glcanvas.GLCanvas):
         dtype=numpy.uint8)
 
         with open("vertex.glsl", "r") as vertex, open("fragment.glsl", "r") as fragment:
-            shaders = OpenGL.GL.shaders.compileProgram(
+            self.shaders = OpenGL.GL.shaders.compileProgram(
                 OpenGL.GL.shaders.compileShader(vertex.read(), GL_VERTEX_SHADER),
                 OpenGL.GL.shaders.compileShader(fragment.read(), GL_FRAGMENT_SHADER)
             )
@@ -89,7 +90,7 @@ class EditCanvas(glcanvas.GLCanvas):
 
         glClearColor(0.1, 0.15, 0.1, 1)
 
-        glUseProgram(shaders)
+        glUseProgram(self.shaders)
 
         self.texture = glGenTextures(1)
         glActiveTexture(GL_TEXTURE0);
@@ -101,7 +102,8 @@ class EditCanvas(glcanvas.GLCanvas):
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
 
-        glUniform1i(glGetUniformLocation(shaders, "ourtexture"), 0)
+        glUniform1i(glGetUniformLocation(self.shaders, "ourtexture"), 0)
+        glUniform2f(glGetUniformLocation(self.shaders, "screensize"), self.GetSize().x, self.GetSize().y)
 
         image = self.GetGrandParent().image
         buffer = image.GetDataBuffer()
