@@ -39,6 +39,25 @@ class EditCanvas(glcanvas.GLCanvas):
         self.Bind(wx.EVT_PAINT, self.OnPaint)
         self.Bind(wx.EVT_SIZE, self.OnResize)
 
+        self.Bind(wx.EVT_MIDDLE_DOWN, self.OnMouseDown)
+        self.Bind(wx.EVT_MIDDLE_UP, self.OnMouseUp)
+        self.Bind(wx.EVT_MOTION, self.OnMouseMotion)
+
+    def OnMouseDown(self, event):
+        self.CaptureMouse()
+        self.oldmx, self.oldmy = self.newmx, self.newmy = event.GetPosition()
+
+    def OnMouseUp(self, event):
+        self.ReleaseMouse()
+
+    def OnMouseMotion(self, event):
+        if event.MiddleIsDown():
+            self.oldmx, self.oldmy = self.newmx, self.newmy
+            self.newmx, self.newmy = event.GetPosition()
+            self.smx, self.smy = self.smx - (self.newmx - self.oldmx), self.smy - (self.newmy - self.oldmy)
+            glUniform2f(glGetUniformLocation(self.shaders, "screenmiddle"), self.smx, self.smy)
+            self.Refresh(False)
+
     def OnResize(self, event):
         if self.initialized:
             glViewport(0, 0, event.Size.width, event.Size.height)
@@ -101,6 +120,8 @@ class EditCanvas(glcanvas.GLCanvas):
 
         glUniform1i(glGetUniformLocation(self.shaders, "ourtexture"), 0)
         glUniform2f(glGetUniformLocation(self.shaders, "screensize"), self.GetSize().x, self.GetSize().y)
+        glUniform2f(glGetUniformLocation(self.shaders, "screenmiddle"), 0, 0)
+        self.smx, self.smy = 0, 0
 
         image = self.GetGrandParent().image
         buffer = image.GetDataBuffer()
