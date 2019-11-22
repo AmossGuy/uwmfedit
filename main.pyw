@@ -20,7 +20,7 @@ class EditorFrame(wx.Frame):
         menubar = wx.MenuBar()
         
         filemenu = wx.Menu()
-        filemenu.Append(wx.ID_NEW, "&New\tCtrl+N")
+        filemenu.Append(wx.ID_NEW)
         
         menubar.Append(filemenu, "&File")
 
