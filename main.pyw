@@ -22,7 +22,7 @@ class EditorFrame(wx.Frame):
         filemenu = wx.Menu()
         filemenu.Append(wx.ID_NEW)
         
-        menubar.Append(filemenu, "&File")
+        menubar.Append(filemenu, wx.GetStockLabel(wx.ID_FILE))
 
         self.SetMenuBar(menubar)
 
