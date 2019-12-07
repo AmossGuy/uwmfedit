@@ -5,7 +5,7 @@ import OpenGL.GL.shaders
 import numpy
 
 class EditViewport(glcanvas.GLCanvas):
-    def __init__(self, parent):
+    def __init__(self, parent, map):
         super().__init__(parent, style=wx.FULL_REPAINT_ON_RESIZE)
 
         self.initialized = False
@@ -16,6 +16,8 @@ class EditViewport(glcanvas.GLCanvas):
         self.Bind(wx.EVT_MIDDLE_DOWN, self.OnMouseDown)
         self.Bind(wx.EVT_MIDDLE_UP, self.OnMouseUp)
         self.Bind(wx.EVT_MOTION, self.OnMouseMotion)
+
+        self.map = map
 
     def OnMouseDown(self, event):
         self.CaptureMouse()
@@ -109,3 +111,11 @@ class EditViewport(glcanvas.GLCanvas):
         glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_BYTE, None)
         
         self.SwapBuffers()
+
+    def generatevbo(self):
+        vbo = []
+        for i in range(len(self.map)):
+            for j in range(len(self.map[i])):
+                if self.map[i][j] != -1:
+                    pass # do cool stuff
+        self.vbo = numpy.array(vbo)

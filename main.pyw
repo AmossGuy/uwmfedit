@@ -2,14 +2,18 @@
 import wx
 
 from editviewport import EditViewport
+from uwmfmap import UwmfMap
 
 class EditorFrame(wx.Frame):
     def __init__(self):
         super().__init__(None, title="AmossGuy’s UWMF Editor")
 
+        self.image = wx.Image("test_tile.png")
+        self.map = UwmfMap()
+
         panel = wx.Panel(self)
 
-        self.canvas = EditViewport(panel)
+        self.canvas = EditViewport(panel, self.map)
 
         sizer = wx.BoxSizer()
         sizer.Add(self.canvas, 1, wx.EXPAND)
@@ -23,8 +27,6 @@ class EditorFrame(wx.Frame):
         menubar.Append(filemenu, wx.GetStockLabel(wx.ID_FILE))
 
         self.SetMenuBar(menubar)
-
-        self.image = wx.Image("test_tile.png")
 
         #self.Bind(wx.EVT_MENU, self.newfile, id=wx.ID_NEW)
 
