@@ -19,6 +19,8 @@ class EditViewport(glcanvas.GLCanvas):
 
         self.map = map
 
+        self.generatevbo()
+
     def OnMouseDown(self, event):
         self.CaptureMouse()
         self.oldmx, self.oldmy = self.newmx, self.newmy = event.GetPosition()
@@ -67,13 +69,16 @@ class EditViewport(glcanvas.GLCanvas):
             )
 
         vbo = glGenBuffers(1)
-        glBindBuffer(GL_ARRAY_BUFFER, vbo)
-        glBufferData(GL_ARRAY_BUFFER, rectangle.nbytes, rectangle, GL_STATIC_DRAW)
+        #glBindBuffer(GL_ARRAY_BUFFER, vbo)
+        #glBufferData(GL_ARRAY_BUFFER, rectangle.nbytes, rectangle, GL_STATIC_DRAW)
 
-        glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, 4 * rectangle.itemsize, ctypes.c_void_p(0))
+        glBindBuffer(GL_ARRAY_BUFFER, vbo)
+        glBufferData(GL_ARRAY_BUFFER, self.vbo.nbytes, self.vbo, GL_STATIC_DRAW)
+
+        glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, 4 * self.vbo.itemsize, ctypes.c_void_p(0))
         glEnableVertexAttribArray(0)
 
-        glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 4 * rectangle.itemsize, ctypes.c_void_p(2 * rectangle.itemsize))
+        glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 4 * self.vbo.itemsize, ctypes.c_void_p(2 * self.vbo.itemsize))
         glEnableVertexAttribArray(1)
 
         elementbuffer = glGenBuffers(1)
@@ -108,14 +113,25 @@ class EditViewport(glcanvas.GLCanvas):
     def draw(self):
         glClear(GL_COLOR_BUFFER_BIT)
 
-        glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_BYTE, None)
+        glDrawArrays(GL_TRIANGLES, 0, len(self.vbo));
         
         self.SwapBuffers()
 
     def generatevbo(self):
         vbo = []
-        for i in range(len(self.map)):
-            for j in range(len(self.map[i])):
-                if self.map[i][j] != -1:
-                    pass # do cool stuff
-        self.vbo = numpy.array(vbo)
+        for y in range(len(self.map.data)):
+            for x in range(len(self.map.data[y])):
+                if self.map.data[y][x] != -1:
+                    topleft = (x * self.map.tilesize, y * self.map.tilesize, 0, 0)
+                    bottomleft = (x * self.map.tilesize, (y+1) * self.map.tilesize, 0, 1)
+                    bottomright = ((x+1) * self.map.tilesize, (y+1) * self.map.tilesize, 1, 1)
+                    topright = ((x+1) * self.map.tilesize, y * self.map.tilesize, 1, 0)
+                    
+                    vbo.extend(topleft)
+                    vbo.extend(bottomleft)
+                    vbo.extend(topright)
+
+                    vbo.extend(topright)
+                    vbo.extend(bottomleft)
+                    vbo.extend(bottomright)
+        self.vbo = numpy.array(vbo, dtype=numpy.float32)
