@@ -28,7 +28,10 @@ class EditorFrame(wx.Frame):
 
         self.SetMenuBar(menubar)
 
-        #self.Bind(wx.EVT_MENU, self.newfile, id=wx.ID_NEW)
+        self.Bind(wx.EVT_MENU, self.OnMenuNew, id=wx.ID_NEW)
+
+    def OnMenuNew(self, event):
+        pass
 
 if __name__ == "__main__":
     app = wx.App()
