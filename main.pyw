@@ -9,11 +9,10 @@ class EditorFrame(wx.Frame):
         super().__init__(None, title="AmossGuy’s UWMF Editor")
 
         self.image = wx.Image("test_tile.png")
-        self.map = UwmfMap()
 
         panel = wx.Panel(self)
 
-        self.canvas = EditViewport(panel, self.map)
+        self.canvas = EditViewport(panel, UwmfMap())
 
         sizer = wx.BoxSizer()
         sizer.Add(self.canvas, 1, wx.EXPAND)
@@ -31,7 +30,7 @@ class EditorFrame(wx.Frame):
         self.Bind(wx.EVT_MENU, self.OnMenuNew, id=wx.ID_NEW)
 
     def OnMenuNew(self, event):
-        pass
+        self.canvas.changemap(UwmfMap())
 
 if __name__ == "__main__":
     app = wx.App()
