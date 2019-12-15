@@ -126,9 +126,9 @@ class EditViewport(glcanvas.GLCanvas):
 
     def generatevbo(self):
         vbo = []
-        for y in range(len(self.map.data)):
-            for x in range(len(self.map.data[y])):
-                if self.map.data[y][x] != -1:
+        for x in range(self.map.width):
+            for y in range(self.map.height):
+                if self.map.data[x + y*self.map.width] != -1:
                     topleft = (x * self.map.tilesize, y * self.map.tilesize, 0, 0)
                     bottomleft = (x * self.map.tilesize, (y+1) * self.map.tilesize, 0, 1)
                     bottomright = ((x+1) * self.map.tilesize, (y+1) * self.map.tilesize, 1, 1)
