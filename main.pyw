@@ -6,7 +6,7 @@ from uwmfmap import UwmfMap
 
 class EditorFrame(wx.Frame):
     def __init__(self):
-        super().__init__(None, title="AmossGuy’s UWMF Editor")
+        super().__init__(None, title="UWMFedit")
 
         self.image = wx.Image("test_tile.png")
 
