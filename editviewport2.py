@@ -27,3 +27,4 @@ class EditViewport(wx.Window):
     
     def changemap(self, map_):
         self.map_ = map_
+        self.Refresh(False)
