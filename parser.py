@@ -13,8 +13,16 @@ class Parser:
         while True:
             if self.buffer[scan].isspace():
                 scan += 1
-            elif self.buffer[scan] in "{}#$":
-                self.lasttokenend = scan + 1
+            elif self.buffer[scan] in identifer_start:
+                t = self.buffer[scan]
+                scan += 1
+                while self.buffer[scan] in identifer_continue:
+                    t += self.buffer[scan]
+                    scan += 1
+                return t
+            elif self.buffer[scan] in "{}=;,":
+                scan += 1
+                self.lasttokenend = scan
                 return self.buffer[scan]
             else:
                 raise Exception
