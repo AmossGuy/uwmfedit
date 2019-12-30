@@ -23,6 +23,13 @@ class Parser:
             elif self.buffer[scan] in "{}=;,":
                 scan += 1
                 self.lasttokenend = scan
-                return self.buffer[scan]
+                return self.buffer[scan - 1]
+            elif self.buffer[scan] == '"':
+                scan += 1
+                while self.buffer[scan] != '"':
+                    if self.buffer[scan] == "\\":
+                        scan += 2
+                    else:
+                        scan += 1
             else:
                 raise Exception
