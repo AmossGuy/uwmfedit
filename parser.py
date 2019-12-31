@@ -25,11 +25,15 @@ class Parser:
                 self.lasttokenend = scan
                 return self.buffer[scan - 1]
             elif self.buffer[scan] == '"':
+                t = self.buffer[scan]
                 scan += 1
                 while self.buffer[scan] != '"':
                     if self.buffer[scan] == "\\":
+                        t += self.buffer[scan] + self.buffer[scan+1]
                         scan += 2
                     else:
+                        t += self.buffer[scan]
                         scan += 1
+                t += self.buffer[scan]
             else:
                 raise Exception
