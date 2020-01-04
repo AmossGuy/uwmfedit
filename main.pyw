@@ -19,10 +19,10 @@ class EditorFrame(wx.Frame):
         panel.SetSizer(sizer)
 
         menubar = wx.MenuBar()
-        
+
         filemenu = wx.Menu()
         filemenu.Append(wx.ID_NEW)
-        
+
         menubar.Append(filemenu, wx.GetStockLabel(wx.ID_FILE))
 
         self.SetMenuBar(menubar)

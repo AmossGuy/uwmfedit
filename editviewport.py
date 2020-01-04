@@ -9,7 +9,7 @@ class EditViewport(glcanvas.GLCanvas):
         super().__init__(parent, style=wx.FULL_REPAINT_ON_RESIZE)
 
         self.initialized = False
-        
+
         self.Bind(wx.EVT_PAINT, self.OnPaint)
         self.Bind(wx.EVT_SIZE, self.OnResize)
 
@@ -52,7 +52,7 @@ class EditViewport(glcanvas.GLCanvas):
         glBindBuffer(GL_ARRAY_BUFFER, self.vbop)
         glBufferData(GL_ARRAY_BUFFER, self.vbo.nbytes, self.vbo, GL_DYNAMIC_DRAW)
         self.draw()
-    
+
     def initialize(self):
         self.context = glcanvas.GLContext(self)
         self.SetCurrent(self.context)
@@ -116,12 +116,12 @@ class EditViewport(glcanvas.GLCanvas):
         glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, image.Width, image.Height, 0, GL_RGB, GL_UNSIGNED_BYTE, numpy.array(buffer, dtype=numpy.uint8))
 
         self.initialized = True
-        
+
     def draw(self):
         glClear(GL_COLOR_BUFFER_BIT)
 
         glDrawArrays(GL_TRIANGLES, 0, len(self.vbo));
-        
+
         self.SwapBuffers()
 
     def generatevbo(self):
@@ -133,7 +133,7 @@ class EditViewport(glcanvas.GLCanvas):
                     bottomleft = (x * self.map.tilesize, (y+1) * self.map.tilesize, 0, 1)
                     bottomright = ((x+1) * self.map.tilesize, (y+1) * self.map.tilesize, 1, 1)
                     topright = ((x+1) * self.map.tilesize, y * self.map.tilesize, 1, 0)
-                    
+
                     vbo.extend(topleft)
                     vbo.extend(bottomleft)
                     vbo.extend(topright)

@@ -3,11 +3,11 @@ import wx
 class EditViewport(wx.Window):
     def __init__(self, parent, map_):
         super().__init__(parent, style=wx.FULL_REPAINT_ON_RESIZE)
-        
+
         self.map_ = map_
 
         self.cameracenter = [0, 0]
-        
+
         self.Bind(wx.EVT_PAINT, self.OnPaint)
 
         self.Bind(wx.EVT_MIDDLE_DOWN, self.OnMiddleDown)
@@ -43,7 +43,7 @@ class EditViewport(wx.Window):
                 if self.map_.data[x + y*self.map_.width] != -1:
                     coord = self.worldtoscreen((x*64, y*64))
                     dc.DrawBitmap(bitmap, coord[0], coord[1], True)
-    
+
     def changemap(self, map_):
         self.map_ = map_
         self.Refresh(False)
