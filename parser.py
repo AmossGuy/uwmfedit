@@ -1,4 +1,5 @@
 import string
+import re
 
 class Parser:
     def __init__(self, buffer):
@@ -43,10 +44,22 @@ class Parser:
                 self.lasttokenend = scan
                 return t
             else:
+                zeroregex  = re.compile(r"[+-]?0")
+                intregex1  = re.compile(r"[+-]?[1-9][0-9]*")
+                intregex2  = re.compile(r"0[0-7]+")
+                intregex3  = re.compile(r"0x[0-9A-Fa-f]+")
+                floatregex = re.compile(r"[+-]?[0-9]+\.[0-9]*([eE][+-]?[0-9]+)?")
+
+                for i in (floatregex, zeroregex, intregex1, intregex2, intregex3):
+                    match = i.match(self.buffer, scan)
+                    if match is not None:
+                        self.lasttokenend = match.end()
+                        return match.group()
+
                 raise Exception
 
 if __name__ == "__main__":
-    f = open(r"C:\Users\User\Downloads\TEXTMAP.txt", "r")
+    f = open(r"../textmap.txt", "r", encoding="ascii") # Use ASCII encoding because I don’t feel like dealing with Unicode yet.
     s = f.read()
     f.close()
 
