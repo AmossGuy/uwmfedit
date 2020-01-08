@@ -50,3 +50,6 @@ class EditViewport(wx.Window):
 
     def worldtoscreen(self, coord):
         return list(map(lambda q, w, e: round(q - w + e/2), coord, self.cameracenter, self.GetClientSize()))
+
+    def screentoworld(self, coord):
+        return list(map(lambda q, w, e: round(q + w - e/2), coord, self.cameracenter, self.GetClientSize()))
