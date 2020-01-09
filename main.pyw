@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 import wx
 
-from editviewport2 import EditViewport
+from editviewport import EditViewport
 from uwmfmap import UwmfMap
 
 class EditorFrame(wx.Frame):
