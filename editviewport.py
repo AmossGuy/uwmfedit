@@ -1,4 +1,5 @@
 import wx
+from math import floor
 
 class EditViewport(wx.Window):
     def __init__(self, parent, map_):
@@ -10,16 +11,35 @@ class EditViewport(wx.Window):
 
         self.Bind(wx.EVT_PAINT, self.OnPaint)
 
+        self.Bind(wx.EVT_LEFT_DOWN, self.OnLeftDown)
         self.Bind(wx.EVT_MIDDLE_DOWN, self.OnMiddleDown)
         self.Bind(wx.EVT_MOTION, self.OnMouseMotion)
         self.Bind(wx.EVT_MIDDLE_UP, self.OnMiddleUp)
+
+    def placetile(self, event, tile):
+        x, y = map(lambda q: floor(q / self.map_.tilesize), self.screentoworld(event.GetPosition()))
+        if x < 0 or y < 0 or x >= self.map_.width or y >= self.map_.height:
+            event.Skip()
+            return
+        self.map_.data[x + y*self.map_.width] = tile
+        self.Refresh(False)
+
+    def OnLeftDown(self, event):
+        self.placetile(event, 0)
+
+    def OnRightDown(self, event):
+        self.placetile(event, -1)
 
     def OnMiddleDown(self, event):
         self.CaptureMouse()
         self.lastmousepos = list(event.GetPosition())
 
     def OnMouseMotion(self, event):
-        if event.MiddleIsDown():
+        if event.LeftIsDown():
+            self.placetile(event, 0)
+        elif event.RightIsDown():
+            self.placetile(event, -1)
+        elif event.MiddleIsDown():
             t = list(event.GetPosition())
             self.cameracenter = list(map(lambda x, y, z: z + (x - y), self.cameracenter, t, self.lastmousepos))
             self.lastmousepos = t
