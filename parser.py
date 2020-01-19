@@ -16,9 +16,9 @@ def parse(buffer):
         "whitespace": r"\s+"
     }
 
-    regex = "|".join("(?P<{}>{})".format(*item) for item in tokentypes.items()) + "|(?P<mismatch>.)"
+    regex = re.compile("|".join("(?P<{}>{})".format(*item) for item in tokentypes.items()) + "|(?P<mismatch>.)", re.MULTILINE)
 
-    for match in re.finditer(regex, buffer):
+    for match in regex.finditer(buffer):
         kind = match.lastgroup
         if kind == "mismatch":
             raise Exception
