@@ -1,7 +1,7 @@
 import string
 import re
 
-def parse(buffer):
+def tokenize(buffer):
     tokentypes = {
         "leftbracket": r"\{",
         "rightbracket": r"}",
@@ -30,7 +30,7 @@ if __name__ == "__main__":
     s = f.read()
     f.close()
 
-    p = parse(s)
+    p = tokenize(s)
 
     for i in p:
         print(i)
