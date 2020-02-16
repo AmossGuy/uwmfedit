@@ -1,8 +1,17 @@
-import random
+from collections import namedtuple
 
 class UwmfMap:
+    mapspot = namedtuple("mapspot", ["tile", "sector", "zone"])
+
     def __init__(self):
-        self.tilesize = 64
-        self.width = 10
-        self.height = 10
-        self.data = [random.choice([-1, 0]) for i in range(self.width*self.height)]
+        self.global_ = {}
+        self.blocks = []
+
+    def init_planemap(self, width, height):
+        self.planemap = [[None] * width for i in range(height)]
+
+    def fill_mapspot(self, x, y, contents):
+        self.planemap[y][x] = contents
+
+    def set_global(self, key, value):
+        self.global_[key] = value
