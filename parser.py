@@ -44,6 +44,7 @@ def parse(tokens):
                     width = int(map_.global_["width"])
                     height = int(map_.global_["height"])
                     map_.init_planemap(width, height)
+                    i = 0
                     while True:
                         token = next(tokens)
                         if token[0] == "leftbracket":
@@ -60,6 +61,7 @@ def parse(tokens):
                                             token = next(tokens)
                                             if token[0] == "integer":
                                                 msc = token[1]
+                                                map_.fill_mapspot(i%width, i//width, uwmfmap.UwmfMap.mapspot(msa, msb, msc))
                                                 token = next(tokens)
                                                 if token[0] == "comma":
                                                     token = next(tokens)
@@ -87,6 +89,7 @@ def parse(tokens):
                                 else: raise Exception
                             else: raise Exception
                         else: raise Exception
+                        i += 1
                 else:
                     block = (g_name, {})
                     map_.blocks.append(block)
@@ -129,3 +132,4 @@ if __name__ == "__main__":
     map_ = parse(tokenize(s))
     print(map_.global_)
     print(map_.blocks)
+    print(map_.planemap)
