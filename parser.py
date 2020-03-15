@@ -125,7 +125,7 @@ def parse(tokens):
     return map_
 
 if __name__ == "__main__":
-    f = open(r"../textmap.txt", "r", encoding="ascii") # Use ASCII encoding because I don’t feel like dealing with Unicode yet.
+    f = open(r"textmap.txt", "r", encoding="ascii") # Use ASCII encoding because I don’t feel like dealing with Unicode yet.
     s = f.read()
     f.close()
 

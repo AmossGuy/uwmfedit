@@ -1,0 +1,70 @@
+namespace = "Wolf3D";
+name = "Test Map";
+tilesize = 64;
+width = 6;
+height = 4;
+tile
+{
+	texturenorth = "GSTONEA1";
+	texturesouth = "GSTONEA1";
+	textureeast = "GSTONEA2";
+	texturewest = "GSTONEA2";
+}
+tile
+{
+	texturenorth = "FAKEDOR1";
+	texturesouth = "FAKEDOR1";
+	textureeast = "FAKEDOR2";
+	texturewest = "FAKEDOR2";
+}
+sector
+{
+	texturefloor = "#717171";
+	textureceiling = "#383838";
+}
+zone
+{
+}
+plane
+{
+	depth = 64;
+}
+planeMap
+{
+	{0,0,-1},
+	{0,0,-1},
+	{0,0,-1},
+	{0,0,-1},
+	{0,0,-1},
+	{0,0,-1},
+	{1,0,-1},
+	{-1,0,0},
+	{-1,0,0},
+	{-1,0,0},
+	{-1,0,0},
+	{0,0,-1},
+	{0,0,-1},
+	{-1,0,0},
+	{-1,0,0},
+	{-1,0,0},
+	{-1,0,0},
+	{0,0,-1},
+	{0,0,-1},
+	{0,0,-1},
+	{0,0,-1},
+	{0,0,-1},
+	{0,0,-1},
+	{0,0,-1}
+}
+thing
+{
+	type = 1;
+	x = 1.5;
+	y = 1.5;
+	z = 0;
+	angle = 0;
+	skill1 = true;
+	skill2 = true;
+	skill3 = true;
+	skill4 = true;
+}
