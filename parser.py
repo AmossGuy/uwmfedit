@@ -27,6 +27,35 @@ def tokenize(buffer):
         elif kind not in ("comment", "whitespace"):
             yield kind, match.group()
 
+def do_the_thingy(token):
+    if token[0] == "identifer":
+        return token[1]
+    elif token[0] == "string":
+        x = token[1][1:-1]
+        s = False
+        o = ""
+        for c in x:
+            if s:
+                if c == "\\":
+                    o += "\\"
+                elif c == '"':
+                    o += '"'
+                elif c == "n":
+                    o += "\n"
+                else : raise Exception
+                s = False
+            else:
+                if c == "\\":
+                    s = True
+                else:
+                    o += c
+        return o
+    elif token[0] == "integer":
+        return int(token[1])
+    elif token[0] == "float":
+        return float(token[1])
+    else: raise Exception
+
 def parse(tokens):
     map_ = uwmfmap.UwmfMap()
 
@@ -50,17 +79,17 @@ def parse(tokens):
                         if token[0] == "leftbracket":
                             token = next(tokens)
                             if token[0] == "integer":
-                                msa = token[1]
+                                msa = int(token[1])
                                 token = next(tokens)
                                 if token[0] == "comma":
                                     token = next(tokens)
                                     if token[0] == "integer":
-                                        msb = token[1]
+                                        msb = int(token[1])
                                         token = next(tokens)
                                         if token[0] == "comma":
                                             token = next(tokens)
                                             if token[0] == "integer":
-                                                msc = token[1]
+                                                msc = int(token[1])
                                                 map_.fill_mapspot(i%width, i//width, uwmfmap.UwmfMap.mapspot(msa, msb, msc))
                                                 token = next(tokens)
                                                 if token[0] == "comma":
@@ -101,7 +130,7 @@ def parse(tokens):
                             if token[0] == "equals":
                                 token = next(tokens)
                                 if token[0] in ["identifer", "string", "integer", "float"]:
-                                    block[1][b_name] = token[1]
+                                    block[1][b_name] = do_the_thingy(token)
                                     token = next(tokens)
                                     if token[0] == "semicolon":
                                         pass
@@ -114,7 +143,7 @@ def parse(tokens):
             elif token[0] == "equals":
                 token = next(tokens)
                 if token[0] in ["identifer", "string", "integer", "float"]:
-                    map_.set_global(g_name, token[1])
+                    map_.set_global(g_name, do_the_thingy(token))
                     token = next(tokens)
                     if token[0] == "semicolon":
                         pass
