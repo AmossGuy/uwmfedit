@@ -42,7 +42,7 @@ def do_the_thingy(token):
                     o += '"'
                 elif c == "n":
                     o += "\n"
-                else : raise Exception
+                else: raise Exception
                 s = False
             else:
                 if c == "\\":
