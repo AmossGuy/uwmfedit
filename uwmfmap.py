@@ -1,8 +1,6 @@
 from collections import namedtuple
 
 class UwmfMap:
-    mapspot = namedtuple("mapspot", ["tile", "sector", "zone"])
-
     def __init__(self):
         self.global_ = {}
         self.blocks = []

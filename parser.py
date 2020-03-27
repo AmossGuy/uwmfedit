@@ -90,7 +90,7 @@ def parse(tokens):
                                             token = next(tokens)
                                             if token[0] == "integer":
                                                 msc = int(token[1])
-                                                map_.fill_mapspot(i%width, i//width, uwmfmap.UwmfMap.mapspot(msa, msb, msc))
+                                                map_.fill_mapspot(i%width, i//width, [msa, msb, msc])
                                                 token = next(tokens)
                                                 if token[0] == "comma":
                                                     token = next(tokens)

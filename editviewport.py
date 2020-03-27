@@ -17,11 +17,14 @@ class EditViewport(wx.Window):
         self.Bind(wx.EVT_MIDDLE_UP, self.OnMiddleUp)
 
     def placetile(self, event, tile):
-        x, y = map(lambda q: floor(q / self.map_.tilesize), self.screentoworld(event.GetPosition()))
-        if x < 0 or y < 0 or x >= self.map_.width or y >= self.map_.height:
+        if self.map_ is None:
+            return
+
+        x, y = map(lambda q: floor(q / self.map_.global_["tilesize"]), self.screentoworld(event.GetPosition()))
+        if x < 0 or y < 0 or x >= self.map_.global_["width"] or y >= self.map_.global_["height"]:
             event.Skip()
             return
-        self.map_.data[x + y*self.map_.width] = tile
+        self.map_.planemap[y][x][0] = tile
         self.Refresh(False)
 
     def OnLeftDown(self, event):
@@ -53,14 +56,19 @@ class EditViewport(wx.Window):
     def OnPaint(self, event):
         dc = wx.BufferedPaintDC(self)
 
+        if self.map_ is None:
+            dc.SetBrush(wx.Brush("#000000"))
+            dc.DrawRectangle(-1, -1, self.GetClientSize()[0] + 2, self.GetClientSize()[1] + 2)
+            return
+
         dc.SetBrush(wx.Brush("#2a3439"))
         dc.DrawRectangle(-1, -1, self.GetClientSize()[0] + 2, self.GetClientSize()[1] + 2)
 
         bitmap = self.GetGrandParent().image.ConvertToBitmap()
 
-        for x in range(self.map_.width):
-            for y in range(self.map_.height):
-                if self.map_.data[x + y*self.map_.width] != -1:
+        for x in range(self.map_.global_["width"]):
+            for y in range(self.map_.global_["height"]):
+                if self.map_.planemap[y][x][0] != -1:
                     coord = self.worldtoscreen((x*64, y*64))
                     dc.DrawBitmap(bitmap, coord[0], coord[1], True)
 
