@@ -1,5 +1,7 @@
 #!/usr/bin/env python3
 import wx
+import sys
+import traceback
 
 from editviewport import EditViewport
 from uwmfmap import UwmfMap
@@ -35,13 +37,20 @@ class EditorFrame(wx.Frame):
             if dialog.ShowModal() == wx.ID_CANCEL:
                 return
 
-            with open(r"textmap.txt", "r", encoding="ascii") as f: # Use ASCII encoding because I don’t feel like dealing with Unicode yet.
+            with open(dialog.GetPath(), "r", encoding="ascii") as f: # Use ASCII encoding because I don’t feel like dealing with Unicode yet.
                 s = f.read()
 
-            self.canvas.changemap(parse(tokenize(s)))
+        self.canvas.changemap(parse(tokenize(s)))
+
+def exceptionhook(type, value, tb):
+    dialog = wx.RichMessageDialog(None, caption="", message="Uncaught exception occurred!", style=wx.DIALOG_NO_PARENT|wx.ICON_ERROR|wx.OK|wx.CENTRE)
+    dialog.ShowDetailedText("".join(traceback.format_exception(type, value, tb)))
+    dialog.ShowModal()
+    dialog.Destroy()
 
 if __name__ == "__main__":
     app = wx.App()
+    sys.excepthook = exceptionhook
     frame = EditorFrame()
     frame.Show()
     app.MainLoop()
